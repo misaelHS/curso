@@ -1,5 +1,5 @@
 from random import randint  # Se importa la funcion para generar el numero aleatorio de tipo entero
-from paquetes.funciones import funcion  # Se importa el modulo de la funcion de validacion
+from Paquetes.Funciones import funcion  # Se importa el modulo de la funcion de validacion
 
 numero_int = randint(0, 2)  # Se elije el intervalo [0,2], se tienen tres opciones: 0,1 y 2
 opciones_String = ['Piedra', 'Papel', 'Tijera']  # Se crea la tabla de las opciones: piedra, papel y tijeras
