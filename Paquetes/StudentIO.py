@@ -2,8 +2,8 @@ from io import open     #Se importa el archivo para manejo de lista
 import pickle           #Se importa el archivo para la serializacion
 
 
-global listaStudentIO   #Se declara una variable global para la lista
-listastudentIO = list()
+global studentIO   #Se declara una variable global para la lista
+studentIO = list()
 
 
 class Estudiante:
@@ -90,20 +90,20 @@ def ingresaEstudiante():
         curso = input("\t\t\tCurso: ")
         correo = input("\t\t\tcorreo: ")
         a1 = Estudiante(matricula, nombre, nacionalidad, curso, correo)
-        listastudentIO.append(a1)
+        studentIO.append(a1)
         i=i+1
         print("\n")
 
-    fichero = open('lalistastudentIO.dat', 'wb')       #Se escribe la lista
-    pickle.dump(listastudentIO, fichero)
+    fichero = open('studentIO.db', 'wb')       #Se escribe la lista
+    pickle.dump(studentIO, fichero)
     fichero.close()
     del(fichero)
 #-----------------------------------------------------Funcion para mostrar los datos capturados
 def muestraEstudiante():
-    ficheroOpen = open('lalistastudentIO.dat', "rb")
-    listastudentIO = pickle.load(ficheroOpen)
+    ficheroOpen = open('studentIO.db', "rb")
+    studentIO = pickle.load(ficheroOpen)
     ficheroOpen.close()
-    for c in listastudentIO:
+    for c in studentIO:
         print(c.get_datos())
 
 #-----------------------------------------------------Funcion para actualizar los datos del estudiante
@@ -118,12 +118,12 @@ def actualizarEstudientes():
         curso = input("\t\t\tCurso: ")
         correo = input("\t\t\tcorreo: ")
         a1 = Estudiante(matricula, nombre, nacionalidad, curso, correo)
-        listastudentIO.append(a1)
+        studentIO.append(a1)
         i = i + 1
         print("\n")
 
-    fichero = open('lalistastudentIO.dat', 'ab')
-    pickle.dump(listastudentIO, fichero)
+    fichero = open('studentIO.db', 'ab')
+    pickle.dump(studentIO, fichero)
     fichero.close()
     del (fichero)
 
