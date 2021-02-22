@@ -1,4 +1,3 @@
-from Paquete3.StudentIO import *
+from Paquetes.StudentIO import *
 
 menu()
-
