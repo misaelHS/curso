@@ -1,13 +1,15 @@
 
-from Paquetes.modulo4 import *
+from Paquetes4.modulo4 import *
 
 #----------------------------------------se define la funcion para mostrar datos
-def mostrarDatos(nombre="", correo="", materias=""):
+def mostrarDatos(nombre="", correo="", passw="",  materias=""):
     objetoBuscar={} #se crea un objeto de tipo diccionario
     if len(nombre) !=0:#si existe se grega una llave
         objetoBuscar["nombre"]=nombre
     if len(correo) != 0:
          objetoBuscar["correo"]=correo
+    if len(passw) != 0:
+         objetoBuscar["passw"]=passw
     if len(materias) !=0:
         objetoBuscar["materias"]=materias
     try:
@@ -28,12 +30,13 @@ def mostrarDatos(nombre="", correo="", materias=""):
 
 #----------------------------------------se define la funcion para limpiar los campos
 def agregarRegistro():
-    if(len(nombre.get())!=0 and len(correo.get())!=0 and len(materias.get())!=0):
+    if(len(nombre.get())!=0 and len(correo.get())!=0 and len(passw.get())!=0 and  len(materias.get())!=0):
         try:
-            documento={"nombre":nombre.get(), "correo":correo.get(),"materias":materias.get()}
+            documento={"nombre":nombre.get(), "correo":correo.get(), "passw":passw.get(), "materias":materias.get()}
             coleccion.insert_one(documento)
             nombre.delete(0,END)
             correo.delete(0,END)
+            passw.delete(0, END)
             materias.delete(0,END)
         except pymongo.errors.ConnectionFailure as error:
             print(error)
@@ -53,22 +56,25 @@ def dobleClick(event):
     nombre.insert(0,documento["nombre"])
     correo.delete(0, END)
     correo.insert(0, documento["correo"])
+    passw.delete(0, END)
+    passw.insert(0, documento["passw"])
     materias.delete(0, END)
     materias.insert(0, documento["materias"])
     agregar["state"]="disabled"
-    editar["state"] = "disabled"
+    editar["state"] = "normal"
     borrar["state"] = "normal"
 
 #----------------------------------------se define la funcion para editar datos
 def editarRegistro():
     global idAlumno
-    if (len(nombre.get()) != 0 and len(correo.get()) != 0 and len(materias.get()) != 0):
+    if (len(nombre.get()) != 0 and len(correo.get()) != 0 and len(passw.get()) != 0 and len(materias.get()) != 0):
         try:
             idBuscar={"_id":ObjectId(idAlumno)}
-            actualizarValores={"nombre": nombre.get(), "correo": correo.get(), "materias": materias.get()}
+            actualizarValores={"nombre": nombre.get(), "correo": correo.get(), "passw": passw.get(), "materias": materias.get()}
             coleccion.update(idBuscar,actualizarValores)
             nombre.delete(0, END)
             correo.delete(0, END)
+            passw.delete(0, END)
             materias.delete(0, END)
         except pymongo.errors.ConnectionFailure as error:
             print(error)
@@ -76,8 +82,8 @@ def editarRegistro():
     else:
         messagebox.showerror(message="Los campos no pueden estar vacios")
     mostrarDatos()
-    agregar["state"] = "normal"
-    editar["state"] = "disabled"
+    agregar["state"] = "disabled"
+    editar["state"] = "normal"
     borrar["state"] = "disabled"
 
 #----------------------------------------se define la funcion para borrar datos
@@ -88,6 +94,7 @@ def borrarRegistro():
         coleccion.delete_one(idBuscar)
         nombre.delete(0, END)
         correo.delete(0, END)
+        passw.delete(0, END)
         materias.delete(0, END)
     except pymongo.errors.ConnectionFailure as error:
           print(error)
@@ -100,8 +107,6 @@ def borrarRegistro():
 #----------------------------------------se define la funcion para buscar datos
 def buscarRegistro():
     mostrarDatos(bucarNombre.get(), buscarCorreo.get(), buscarMaterias.get())
-
-#.-----------
 
 #---------------------------------------configuracion de interfaz grafica
 ventana=Tk()
@@ -121,40 +126,43 @@ nombre.focus()
 Label(ventana,text="Correo").grid(row=3,column=0,sticky=W+E)
 correo=Entry(ventana)
 correo.grid(row=3,column=1,sticky=W+E)
+#interfaz grafica para agregar el passw
+Label(ventana,text="Passw").grid(row=4,column=0,sticky=W+E)
+passw=Entry(ventana)
+passw.grid(row=4,column=1,sticky=W+E)
 #interfaz para agregar la materia
-Label(ventana,text="Materias").grid(row=4,column=0,sticky=W+E)
+Label(ventana,text="Materias").grid(row=5,column=0,sticky=W+E)
 materias=Entry(ventana)
-materias.grid(row=4,column=1,sticky=W+E)
+materias.grid(row=5,column=1,sticky=W+E)
 #interfaz para el icono Agregar
 agregar=Button(ventana, text="Agregar estudiante", command=agregarRegistro, bg="blue", fg="white")
-agregar.grid(row=5,column=2,sticky=W+E)
+agregar.grid(row=6,column=2,sticky=W+E)
 #interfaz para el icono Editar
 editar=Button(ventana,text="Editar estudiante", command=editarRegistro, bg="yellow")
-editar.grid(row=6,column=2,sticky=W+E)
+editar.grid(row=7,column=2,sticky=W+E)
 editar["state"]="disabled"
 #interfaz para el icono Borrar
 borrar=Button(ventana,text="Borrar estudiante", command=borrarRegistro, bg="red", fg="white")
-borrar.grid(row=7,column=2,sticky=W+E)
+borrar.grid(row=8,column=2,sticky=W+E)
 borrar["state"]="disabled"
 
 # Configuracion de la interfaz grafica para el boton buscar datos en la base
 buscar=Button(ventana,text="Buscar datos", command=buscarRegistro, bg="green", fg="white")
-buscar.grid(row=8,column=2,sticky=W+E)
+buscar.grid(row=9,column=2,sticky=W+E)
 #interfaz para buscar el nombre
-Label(ventana,text="Buscar por nombre").grid(row=9,column=0,sticky=W+E)
+Label(ventana,text="Buscar por nombre").grid(row=10,column=0,sticky=W+E)
 bucarNombre=Entry(ventana)
-bucarNombre.grid(row=9,column=1,sticky=W+E)
+bucarNombre.grid(row=10,column=1,sticky=W+E)
 nombre.focus()
+
 #interfaz para buscar el correo
-Label(ventana,text="Buscar por correo").grid(row=10,column=0,sticky=W+E)
+Label(ventana,text="Buscar por correo").grid(row=11,column=0,sticky=W+E)
 buscarCorreo=Entry(ventana)
-buscarCorreo.grid(row=10,column=1,sticky=W+E)
+buscarCorreo.grid(row=11,column=1,sticky=W+E)
 #interfaz para buscar la materia
-Label(ventana,text="Buscar por materias").grid(row=11,column=0,sticky=W+E)
+Label(ventana,text="Buscar por materias").grid(row=12,column=0,sticky=W+E)
 buscarMaterias=Entry(ventana)
-buscarMaterias.grid(row=11,column=1,sticky=W+E)
+buscarMaterias.grid(row=12,column=1,sticky=W+E)
+
 mostrarDatos()
 ventana.mainloop()
-
-
-
