@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     print(r)
 
-    f=open('test.zip','rb')
+    f=open('proyecto.zip','rb')
     r=c.enviar(f.read())
 
     c.desconectar()
